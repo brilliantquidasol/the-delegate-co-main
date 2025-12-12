@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import "../index.css";
+
+@keyframes scroll-gallery {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-gallery {
+  animation: scroll-gallery 30s linear infinite;
+}
+
