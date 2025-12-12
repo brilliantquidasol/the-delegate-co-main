@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import {
   ArrowRight,
@@ -10,6 +11,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import GetInTouch from "../components/GetInTouch";
 import ApplyModal from "../components/ApplyModal";
+import { Reveal } from "../components/Reveal";
 
 const differentiators = [
   {
@@ -180,7 +182,7 @@ export default function Page() {
         </div>
 
         <div className="relative z-10 mx-auto grid max-w-7xl gap-6 sm:gap-8 px-4 pt-16 sm:pt-20 sm:pb-12 md:gap-12 md:px-6 md:pt-24 md:pb-0 md:grid-cols-[1.1fr,0.9fr] md:items-center">
-          <div className="space-y-3 sm:space-y-4 md:space-y-6 md:pb-0 pb-6 sm:pb-8">
+          <Reveal className="space-y-3 sm:space-y-4 md:space-y-6 md:pb-0 pb-6 sm:pb-8">
             <h1 className="text-[36px] sm:text-[36px] leading-tight font-bold text-white md:text-[64px] md:leading-none lg:text-[85px]">
               <span className="block sm:inline">
                 Your behind-
@@ -194,12 +196,20 @@ export default function Page() {
               Because with great creativity comes <br className="hidden md:block" /> great results.
             </p>
             <div className="flex flex-row items-center gap-3 md:gap-4 text-sm font-semibold">
-              <button className="flex justify-center items-center gap-[10px] rounded-md bg-[#d5a546] px-4 sm:px-5 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium leading-[150%] text-[#1E1E1E] transition hover:bg-[#c29132] md:px-6 md:py-3 md:text-[16px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
+              <Link
+                href="#what-we-do"
+                className="flex justify-center items-center gap-[10px] rounded-md bg-[#d5a546] px-4 sm:px-5 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium leading-[150%] text-[#1E1E1E] transition hover:bg-[#c29132] md:px-6 md:py-3 md:text-[16px]"
+                style={{ fontFamily: "Moderat, sans-serif" }}
+              >
                 Explore More
-              </button>
-              <button className="flex justify-center items-center gap-[10px] rounded-[8px] border border-[#C4A35A] bg-[#030c32] px-4 sm:px-5 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium leading-[150%] text-[#C4A35A] transition hover:bg-[#0c1f55] md:px-6 md:py-3 md:text-[16px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
+              </Link>
+              <Link
+                href="#our-services"
+                className="flex justify-center items-center gap-[10px] rounded-[8px] border border-[#C4A35A] bg-[#030c32] px-4 sm:px-5 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium leading-[150%] text-[#C4A35A] transition hover:bg-[#0c1f55] md:px-6 md:py-3 md:text-[16px]"
+                style={{ fontFamily: 'Moderat, sans-serif' }}
+              >
                 Services
-              </button>
+              </Link>
             </div>
             <p className="text-[14px] sm:text-[15px] font-normal leading-[135%] text-[#FFFFFFB2] max-w-2xl md:text-[17px]">
               We are Singapore&apos;s trailblazing virtual assistant agency,
@@ -208,20 +218,20 @@ export default function Page() {
               help entrepreneurs and companies stay productive <br className="hidden md:block" /> and stand out in
               a fast-paced world.
             </p>
-          </div>
-          <div className="relative">
+          </Reveal>
+          <Reveal className="relative" delay={120}>
             <img
               src="/home/hero-overlay-image.png"
               alt="Delegate leadership"
               className="hidden md:block w-full rounded-xl sm:rounded-2xl md:rounded-[32px] object-cover shadow-[0_25px_80px_rgba(0,0,0,0.25)]"
               loading="lazy"
             />
-          </div>
+          </Reveal>
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl px-4 py-8 sm:py-12 md:px-6 md:py-16">
-        <div className="flex flex-col self-stretch rounded-[8px] bg-[#1E2A44] px-4 py-5 sm:py-6 text-white sm:px-6 md:px-[50px] md:py-[30px]">
+      <section id="what-we-do" className="mx-auto max-w-6xl px-4 py-8 sm:py-12 md:px-6 md:py-16">
+        <Reveal className="flex flex-col self-stretch rounded-[8px] bg-[#1E2A44] px-4 py-5 sm:py-6 text-white sm:px-6 md:px-[50px] md:py-[30px]">
           <p className="inline-flex w-fit justify-center items-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] font-medium leading-[150%] text-white mb-3 sm:mb-4 md:text-[14px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
             What We Do
           </p>
@@ -235,14 +245,16 @@ export default function Page() {
               <img src="/the-delegate-co-logo.png" alt="Delegate mark · Since 2016" className="w-[80px] sm:w-[100px] h-auto md:w-[120px] lg:w-[208px] lg:h-[188px] aspect-[52/47]" />
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-8 sm:pb-12 md:px-6 md:pb-16">
         <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {differentiators.map((item) => (
-            <article
+          {differentiators.map((item, index) => (
+            <Reveal
               key={item.title}
+              as="article"
+              delay={index * 60}
             >
               <div className="mb-3 sm:mb-4 flex h-[50px] w-[50px] sm:h-[60px] sm:w-[60px] items-center justify-center rounded-xl sm:rounded-2xl md:h-[70px] md:w-[70px]">
                 <img src={item.icon} alt={item.title} className="h-[50px] w-[50px] sm:h-[60px] sm:w-[60px] md:h-[70px] md:w-[70px]" />
@@ -253,7 +265,7 @@ export default function Page() {
               <p className="mt-1.5 sm:mt-2 text-[14px] sm:text-[15px] font-normal leading-[135%] text-[#1E1E1E] md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
                 {item.copy}
               </p>
-            </article>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -283,41 +295,45 @@ export default function Page() {
       <section className="py-8 sm:py-12 bg-white md:py-16">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="space-y-4 sm:space-y-6 md:space-y-8">
-            <p className="inline-flex w-fit justify-center items-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] font-medium leading-[150%] text-white md:text-[14px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
+            <Reveal as="p" className="inline-flex w-fit justify-center items-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] font-medium leading-[150%] text-white md:text-[14px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
               About Us
-            </p>
+            </Reveal>
             
-            <h2 className="text-[18px] sm:text-[20px] leading-normal text-[#1E1E1E] md:text-[32px] lg:text-[40px]" style={{ fontFamily: "'Figtree', sans-serif", letterSpacing: '-0.8px' }}>
-              <span className="font-normal">Built in-house, </span>
-              <span className="font-bold">our team of virtual assistants, video editors, graphic designers, telemarketers, social media managers, and bookkeepers understands both the operational backbone and the creative growth engine of every business. </span>
-              <span className="font-normal">We turn tasks into opportunities, data into insights, and workflows into success stories.</span>
-            </h2>
+            <Reveal>
+              <h2 className="text-[18px] sm:text-[20px] leading-normal text-[#1E1E1E] md:text-[32px] lg:text-[40px]" style={{ fontFamily: "'Figtree', sans-serif", letterSpacing: '-0.8px' }}>
+                <span className="font-normal">Built in-house, </span>
+                <span className="font-bold">our team of virtual assistants, video editors, graphic designers, telemarketers, social media managers, and bookkeepers understands both the operational backbone and the creative growth engine of every business. </span>
+                <span className="font-normal">We turn tasks into opportunities, data into insights, and workflows into success stories.</span>
+              </h2>
+            </Reveal>
             
             <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-              <p className="text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
+              <Reveal as="p" className="text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
                 The Delegate Co. is the dedicated support powerhouse for entrepreneurs and companies — a trusted partner known for efficiency, adaptability, and smart delegation. We&apos;re not just an admin team; we&apos;re a group of problem-solvers, creators, and thinkers with a deep understanding of business needs, people, and processes.
-              </p>
-              <p className="text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
+              </Reveal>
+              <Reveal as="p" className="text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }} delay={80}>
                 Our edge lies in the balance we strike between human intuition and digital productivity tools. Every task, project, and strategy is guided by systems, performance data, and a clear sense of purpose. Whether you&apos;re a solo founder, scaling startup, or established business,
-              </p>
+              </Reveal>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#f5f9ff] py-8 sm:py-12 md:py-16">
+      <section id="our-services" className="bg-[#f5f9ff] py-8 sm:py-12 md:py-16">
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="mb-6 sm:mb-8 md:mb-10">
-            <p className="inline-flex w-fit justify-center items-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] font-medium leading-[150%] text-white mb-3 sm:mb-4 md:text-[14px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
+            <Reveal as="p" className="inline-flex w-fit justify-center items-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] font-medium leading-[150%] text-white mb-3 sm:mb-4 md:text-[14px]" style={{ fontFamily: 'Moderat, sans-serif' }}>
               Our Services
-            </p>
-            <h2 className="text-[24px] sm:text-[28px] font-semibold leading-tight text-[#1E1E1E] md:text-[48px] md:leading-none lg:text-[64px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-              Services We Provided
-            </h2>
+            </Reveal>
+            <Reveal>
+              <h2 className="text-[24px] sm:text-[28px] font-semibold leading-tight text-[#1E1E1E] md:text-[48px] md:leading-none lg:text-[64px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                Services We Provided
+              </h2>
+            </Reveal>
           </div>
           <div className="divide-y divide-[#e4e9f3]">
             {services.map((service) => (
-              <div
+              <Reveal
                 key={service.title}
                 className="flex flex-col gap-3 sm:gap-4 py-5 sm:py-6 md:flex-row md:items-center md:gap-8"
               >
@@ -337,7 +353,7 @@ export default function Page() {
                 >
                   Apply Now
                 </button>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -353,18 +369,22 @@ export default function Page() {
       >
         <div className="mx-auto max-w-6xl px-4 md:px-6">
           <div className="mb-5 sm:mb-6 md:mb-8">
-            <p className="inline-flex w-fit items-center justify-center rounded-full border border-white/70 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-white/90 md:text-[12px]">
+            <Reveal as="p" className="inline-flex w-fit items-center justify-center rounded-full border border-white/70 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-white/90 md:text-[12px]">
               How We Do
-            </p>
-            <h2 className="mt-3 sm:mt-4 text-[20px] sm:text-[24px] font-semibold leading-tight md:text-[36px] lg:text-[48px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-              Your All-in-One Remote Team
-            </h2>
+            </Reveal>
+            <Reveal>
+              <h2 className="mt-3 sm:mt-4 text-[20px] sm:text-[24px] font-semibold leading-tight md:text-[36px] lg:text-[48px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                Your All-in-One Remote Team
+              </h2>
+            </Reveal>
           </div>
 
           <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
-            {remoteTeam.map((role) => (
-              <article
+            {remoteTeam.map((role, index) => (
+              <Reveal
                 key={role.title}
+                as="article"
+                delay={index * 70}
                 className="flex h-full flex-col gap-2.5 sm:gap-3 rounded-lg sm:rounded-xl md:rounded-2xl border border-[#dbe6f2] bg-white p-3 sm:p-4 md:p-6 text-[#1E1E1E] shadow-[0_12px_30px_rgba(0,0,0,0.12)]"
               >
                 <div className="mb-1 h-[45px] w-[45px] sm:h-[50px] sm:w-[50px] rounded-lg sm:rounded-xl flex items-center justify-center overflow-hidden md:h-[70px] md:w-[70px]">
@@ -379,31 +399,37 @@ export default function Page() {
                 <button className="mt-auto self-start text-left text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] underline md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
                   Learn More
                 </button>
-              </article>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="flex flex-col items-center self-stretch gap-6 sm:gap-8 bg-white p-4 sm:p-6 md:gap-16 md:p-12 lg:gap-20 lg:p-20">
+      <section
+        id="faq"
+        className="flex flex-col items-center self-stretch gap-6 sm:gap-8 bg-white p-4 sm:p-6 md:gap-16 md:p-12 lg:gap-20 lg:p-20"
+      >
         <div className="mx-auto max-w-6xl grid w-full gap-6 sm:gap-8 lg:grid-cols-2 lg:items-start lg:gap-12">
           <div className="flex flex-col gap-3 sm:gap-4 md:gap-6">
             <div>
-              <p className="inline-flex w-fit items-center justify-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-white md:text-[12px]">
+              <Reveal as="p" className="inline-flex w-fit items-center justify-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.2em] text-white md:text-[12px]">
                 FAQs
-              </p>
-              <h2 className="mt-3 sm:mt-4 self-stretch text-[20px] sm:text-[24px] font-semibold leading-tight text-[#1E2A44] md:text-[40px] md:leading-none lg:text-[64px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                Frequently Asked Questions
-              </h2>
+              </Reveal>
+              <Reveal>
+                <h2 className="mt-3 sm:mt-4 self-stretch text-[20px] sm:text-[24px] font-semibold leading-tight text-[#1E2A44] md:text-[40px] md:leading-none lg:text-[64px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                  Frequently Asked Questions
+                </h2>
+              </Reveal>
             </div>
 
             <div className="space-y-2.5 sm:space-y-3 md:space-y-4">
               {faqs.map((faq, index) => {
                 const isOpen = openFaq === index;
                 return (
-                  <div
+                  <Reveal
                     key={faq.question}
                     className="rounded-lg sm:rounded-xl md:rounded-2xl border border-[#e4e9f3] bg-white p-3 sm:p-4 md:p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+                    delay={index * 60}
                   >
                     <button
                       className="flex w-full items-center justify-between text-left text-[13px] sm:text-[14px] font-medium text-[#1E1E1E] md:text-[17px]"
@@ -420,20 +446,20 @@ export default function Page() {
                         {faq.answer}
                       </p>
                     )}
-                  </div>
+                  </Reveal>
                 );
               })}
             </div>
           </div>
 
-          <div className="relative self-stretch w-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl shadow-[0_30px_90px_rgba(0,0,0,0.16)] min-h-[200px] sm:min-h-[250px] md:min-h-[400px] lg:w-[650px] lg:min-h-[460px]">
+          <Reveal className="relative self-stretch w-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl shadow-[0_30px_90px_rgba(0,0,0,0.16)] min-h-[200px] sm:min-h-[250px] md:min-h-[400px] lg:w-[650px] lg:min-h-[460px]" delay={120}>
             <img
               src="/home/faq.jpg"
               alt="Team reviewing analytics dashboards"
               className="absolute inset-0 h-full w-full object-cover"
               loading="lazy"
             />
-          </div>
+          </Reveal>
         </div>
       </section>
 

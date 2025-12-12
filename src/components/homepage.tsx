@@ -381,7 +381,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="flex flex-col items-center self-stretch gap-20 bg-white p-20">
+      <section id="faq" className="flex flex-col items-center self-stretch gap-20 bg-white p-20">
         <div className="mx-auto max-w-6xl grid w-full gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
           <div className="flex flex-col gap-6">
             <div>

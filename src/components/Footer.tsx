@@ -1,6 +1,8 @@
 import { Linkedin, Facebook, Instagram } from "lucide-react";
 
-function FooterColumn({ title, items }: { title: string; items: string[] }) {
+type FooterItem = { label: string; href: string };
+
+function FooterColumn({ title, items }: { title: string; items: FooterItem[] }) {
   return (
     <div>
       <h4 className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
@@ -8,8 +10,8 @@ function FooterColumn({ title, items }: { title: string; items: string[] }) {
       </h4>
       <ul className="mt-3 space-y-2 text-sm text-white/80">
         {items.map((item) => (
-          <li key={item}>
-            <a href="#">{item}</a>
+          <li key={item.label}>
+            <a href={item.href}>{item.label}</a>
           </li>
         ))}
       </ul>
@@ -29,8 +31,23 @@ export default function Footer() {
             paired with creativity.
           </p>
         </div>
-        <FooterColumn title="Quick Links" items={["About", "Hire Our Team", "Careers", "Contact"]} />
-        <FooterColumn title="Support" items={["Help & FAQ", "Privacy Policy", "Terms"]} />
+        <FooterColumn
+          title="Quick Links"
+          items={[
+            { label: "About", href: "#" },
+            { label: "Hire Our Team", href: "#" },
+            { label: "Careers", href: "#" },
+            { label: "Contact", href: "#" },
+          ]}
+        />
+        <FooterColumn
+          title="Support"
+          items={[
+            { label: "Help & FAQ", href: "#faq" },
+            { label: "Privacy Policy", href: "#" },
+            { label: "Terms", href: "#" },
+          ]}
+        />
         <div className="space-y-3 sm:space-y-4">
           <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
             Social Media

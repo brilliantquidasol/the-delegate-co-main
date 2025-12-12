@@ -11,6 +11,7 @@ import {
   Paperclip,
   Check,
 } from "lucide-react";
+import { Reveal } from "./Reveal";
 
 type FormField = {
   type: "text" | "email" | "tel" | "textarea" | "file";
@@ -24,6 +25,7 @@ type FormField = {
 type GetInTouchProps = {
   formTitle?: string;
   formFields?: FormField[];
+  sectionId?: string;
 };
 
 const defaultFormFields: FormField[] = [
@@ -47,9 +49,9 @@ const iconMap = {
   paperclip: Paperclip,
 };
 
-export default function GetInTouch({ formTitle = "Contact Form", formFields = defaultFormFields }: GetInTouchProps) {
+export default function GetInTouch({ formTitle = "Contact Form", formFields = defaultFormFields, sectionId }: GetInTouchProps) {
   return (
-    <section className="bg-[#f5f9ff] py-8 sm:py-12 md:py-16">
+    <section className="bg-[#f5f9ff] py-8 sm:py-12 md:py-16" id={sectionId}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[32px] shadow-[0_25px_80px_rgba(0,0,0,0.08)]">
           {/* Background Colors - Split Vertically */}
@@ -64,46 +66,58 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
             <div className="flex flex-col px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 text-white bg-gradient-to-b from-[#1E2A44] to-[#1a3a6b] md:bg-transparent">
               {/* Top Section - Dark Blue */}
               <div className="space-y-4 sm:space-y-5 md:space-y-6 mb-8 sm:mb-10 md:mb-12">
-                <p className="inline-flex w-fit items-center justify-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] md:text-[14px] font-medium leading-[150%] text-white" style={{ fontFamily: 'Moderat, sans-serif' }}>
+                <Reveal as="p" className="inline-flex w-fit items-center justify-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] md:text-[14px] font-medium leading-[150%] text-white" style={{ fontFamily: 'Moderat, sans-serif' }}>
                   Contact Us
-                </p>
-                <h2 className="text-[32px] sm:text-[40px] md:text-[56px] lg:text-[64px] font-semibold leading-tight md:leading-none text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  Get in touch!
-                </h2>
-                <p className="text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-white/90" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  The Delegate Co. is the dedicated support powerhouse for entrepreneurs and companies — a trusted partner known for efficiency, adaptability, and smart delegation.
-                </p>
+                </Reveal>
+                <Reveal>
+                  <h2 className="text-[32px] sm:text-[40px] md:text-[56px] lg:text-[64px] font-semibold leading-tight md:leading-none text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                    Get in touch!
+                  </h2>
+                </Reveal>
+                <Reveal>
+                  <p className="text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-white/90" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                    The Delegate Co. is the dedicated support powerhouse for entrepreneurs and companies — a trusted partner known for efficiency, adaptability, and smart delegation.
+                  </p>
+                </Reveal>
               </div>
               
               {/* Bottom Section - Blue Gradient */}
               <div className="space-y-4 sm:space-y-5 md:space-y-6">
-                <p className="text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-white/90" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  We&apos;re happy to answer any questions you may have and help you determine which of our services best fit your needs.
-                </p>
-                <p className="text-[14px] sm:text-[15px] md:text-[17px] font-bold leading-[135%] text-white underline" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  Call us at: +65 8333 0499
-                </p>
+                <Reveal>
+                  <p className="text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-white/90" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                    We&apos;re happy to answer any questions you may have and help you determine which of our services best fit your needs.
+                  </p>
+                </Reveal>
+                <Reveal>
+                  <p className="text-[14px] sm:text-[15px] md:text-[17px] font-bold leading-[135%] text-white underline" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                    Call us at: +65 8333 0499
+                  </p>
+                </Reveal>
                 
                 <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4">
-                  <h3 className="text-[18px] sm:text-[20px] md:text-[24px] font-bold leading-normal text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                    Your benefits:
-                  </h3>
+                  <Reveal>
+                    <h3 className="text-[18px] sm:text-[20px] md:text-[24px] font-bold leading-normal text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                      Your benefits:
+                    </h3>
+                  </Reveal>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                     {["Client-oriented", "Results-driven", "Independent", "Competent", "Problem-solving"].map((benefit) => (
-                      <div key={benefit} className="flex items-center gap-2">
+                      <Reveal key={benefit} className="flex items-center gap-2">
                         <Check className="h-4 w-4 sm:h-5 sm:w-5 text-white shrink-0" />
                         <span className="text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-white/90" style={{ fontFamily: "'Figtree', sans-serif" }}>
                           {benefit}
                         </span>
-                      </div>
+                      </Reveal>
                     ))}
                   </div>
                 </div>
 
                 <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4">
-                  <h3 className="text-[18px] sm:text-[20px] md:text-[24px] font-bold leading-normal text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                    What Happen Next?
-                  </h3>
+                  <Reveal>
+                    <h3 className="text-[18px] sm:text-[20px] md:text-[24px] font-bold leading-normal text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                      What Happen Next?
+                    </h3>
+                  </Reveal>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
                     <div className="flex items-start gap-2 sm:gap-3">
                       <span className="text-[32px] sm:text-[40px] md:text-[48px] font-bold leading-none text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>1</span>
@@ -131,9 +145,11 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
             {/* Right Panel - Contact Form */}
             <div className="px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12">
               <div className="rounded-xl sm:rounded-2xl md:rounded-[32px] bg-white p-5 sm:p-6 md:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.08)]">
-                <h2 className="text-[24px] sm:text-[32px] md:text-[42px] font-semibold leading-tight text-[#1E1E1E] mb-5 sm:mb-6 md:mb-8" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  {formTitle}
-                </h2>
+                <Reveal>
+                  <h2 className="text-[24px] sm:text-[32px] md:text-[42px] font-semibold leading-tight text-[#1E1E1E] mb-5 sm:mb-6 md:mb-8" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                    {formTitle}
+                  </h2>
+                </Reveal>
                 <form className="space-y-4 sm:space-y-5">
                   {formFields.map((field, index) => {
                     const IconComponent = iconMap[field.icon];
@@ -154,7 +170,7 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                     if (shouldGroup && nextField) {
                       const NextIconComponent = iconMap[nextField.icon];
                       return (
-                        <div key={`${field.name}-${nextField.name}`} className="grid gap-4 sm:gap-5 md:grid-cols-2">
+                        <Reveal key={`${field.name}-${nextField.name}`} className="grid gap-4 sm:gap-5 md:grid-cols-2">
                           <div className="relative">
                             <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
                             <input
@@ -177,13 +193,13 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                               style={{ fontFamily: "'Figtree', sans-serif" }}
                             />
                           </div>
-                        </div>
+                        </Reveal>
                       );
                     }
 
                     if (isTextarea) {
                       return (
-                        <div key={field.name} className="relative">
+                        <Reveal key={field.name} className="relative">
                           <IconComponent className="absolute left-3 sm:left-4 top-3 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
                           <textarea
                             name={field.name}
@@ -193,13 +209,13 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                             className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a] resize-none"
                             style={{ fontFamily: "'Figtree', sans-serif" }}
                           />
-                        </div>
+                        </Reveal>
                       );
                     }
 
                     if (isFile) {
                       return (
-                        <div key={field.name} className="relative">
+                        <Reveal key={field.name} className="relative">
                           <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
                           <input
                             type="file"
@@ -207,12 +223,12 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                             className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a] file:border-0 file:bg-transparent file:text-[#1E1E1E]"
                             style={{ fontFamily: "'Figtree', sans-serif" }}
                           />
-                        </div>
+                        </Reveal>
                       );
                     }
 
                     return (
-                      <div key={field.name} className="relative">
+                      <Reveal key={field.name} className="relative">
                         <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
                         <input
                           type={field.type}
@@ -222,7 +238,7 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                           className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]"
                           style={{ fontFamily: "'Figtree', sans-serif" }}
                         />
-                      </div>
+                      </Reveal>
                     );
                   })}
                   <button className="w-full rounded-[8px] bg-[#c4a35a] px-5 sm:px-6 py-2.5 sm:py-3 text-center text-[15px] sm:text-[16px] md:text-[17px] font-medium leading-[135%] text-white transition hover:bg-[#b8934f]" style={{ fontFamily: "'Figtree', sans-serif" }}>

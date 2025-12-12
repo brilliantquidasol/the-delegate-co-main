@@ -178,7 +178,10 @@ export default function HirePage() {
       </section>
 
       {/* Our Service Offerings Section */}
-      <section className="flex flex-col items-center gap-5 self-stretch bg-white py-8 sm:py-12 px-4 md:py-16 md:px-12 lg:px-20">
+      <section
+        id="services"
+        className="flex flex-col items-center gap-5 self-stretch bg-white py-8 sm:py-12 px-4 md:py-16 md:px-12 lg:px-20"
+      >
         <div className="mx-auto max-w-7xl w-full">
           <div className="text-center mb-6 sm:mb-8 md:mb-12">
             <h2 className="text-[24px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold leading-tight md:leading-none text-[#1E1E1E] mb-3 sm:mb-4" style={{ fontFamily: "'Figtree', sans-serif" }}>
@@ -270,10 +273,16 @@ export default function HirePage() {
           { type: "textarea", name: "message", placeholder: "How can we help you? Feel free to get in touch!", icon: "pencil" },
           { type: "file", name: "attachment", placeholder: "Attach File", icon: "paperclip" },
         ]}
+        sectionId="hire-contact"
       />
 
       {/* CTA Section */}
-      <FinalCTA />
+      <FinalCTA
+        buttons={[
+          { label: "Explore More", variant: "primary", href: "#services" },
+          { label: "Services", variant: "secondary", href: "#services" },
+        ]}
+      />
 
       <Footer />
     </main>

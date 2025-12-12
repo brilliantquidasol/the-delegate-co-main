@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const navLinks: Array<{ label: string; href: string }> = [
-  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Hire Our Team", href: "/hire" },
   { label: "Careers", href: "/careers" },
