@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
+import type { UrlObject } from "url";
 import { Reveal } from "./Reveal";
+
+type LinkHref = Route | UrlObject;
 
 interface Button {
   label: string;
@@ -70,12 +74,31 @@ export default function FinalCTA({
                   : "rounded-[8px] border border-[#C4A35A] bg-[#1E2A44] text-[#C4A35A] hover:bg-[#0c1f55]"
               }`;
 
-              // Render anchor when href is provided for proper navigation
-              if (button.href) {
+              const href = button.href;
+              const key = `${button.label}-${index}`;
+
+              // Hash-only links should use a native anchor to satisfy Next.js typed routes
+              if (href && href.startsWith("#")) {
+                return (
+                  <a
+                    key={key}
+                    href={href}
+                    onClick={button.onClick}
+                    className={baseClasses}
+                    style={{ fontFamily: "Moderat, sans-serif" }}
+                  >
+                    {button.label}
+                  </a>
+                );
+              }
+
+              // Internal/external routes leverage Next.js Link
+              if (href) {
+                const linkHref = href as LinkHref;
                 return (
                   <Link
-                    key={`${button.label}-${index}`}
-                    href={button.href}
+                    key={key}
+                    href={linkHref}
                     onClick={button.onClick}
                     className={baseClasses}
                     style={{ fontFamily: "Moderat, sans-serif" }}
@@ -87,7 +110,7 @@ export default function FinalCTA({
 
               return (
                 <button
-                  key={`${button.label}-${index}`}
+                  key={key}
                   onClick={button.onClick}
                   className={baseClasses}
                   style={{ fontFamily: "Moderat, sans-serif" }}

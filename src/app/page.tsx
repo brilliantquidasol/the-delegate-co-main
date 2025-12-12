@@ -197,14 +197,14 @@ export default function Page() {
             </p>
             <div className="flex flex-row items-center gap-3 md:gap-4 text-sm font-semibold">
               <Link
-                href="#what-we-do"
+                href="/#what-we-do"
                 className="flex justify-center items-center gap-[10px] rounded-md bg-[#d5a546] px-4 sm:px-5 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium leading-[150%] text-[#1E1E1E] transition hover:bg-[#c29132] md:px-6 md:py-3 md:text-[16px]"
                 style={{ fontFamily: "Moderat, sans-serif" }}
               >
                 Explore More
               </Link>
               <Link
-                href="#our-services"
+                href="/#our-services"
                 className="flex justify-center items-center gap-[10px] rounded-[8px] border border-[#C4A35A] bg-[#030c32] px-4 sm:px-5 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium leading-[150%] text-[#C4A35A] transition hover:bg-[#0c1f55] md:px-6 md:py-3 md:text-[16px]"
                 style={{ fontFamily: 'Moderat, sans-serif' }}
               >
