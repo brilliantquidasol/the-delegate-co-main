@@ -48,6 +48,7 @@ export default function Header() {
         className={`fixed top-0 left-0 right-0 z-50 w-full text-white transition-colors duration-300 ${
           isScrolled ? "bg-[#1E2A44]" : "bg-transparent"
         }`}
+        data-site-header
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:py-4 md:px-8">
           <Link 

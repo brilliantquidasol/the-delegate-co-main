@@ -1,6 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
 @import "../index.css";
 
+:root {
+  --header-offset: 88px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Keep anchored sections visible beneath fixed header */
+section[id],
+main [id][data-anchor],
+main [id] {
+  scroll-margin-top: var(--header-offset);
+}
+
 @keyframes scroll-gallery {
   0% {
     transform: translateX(0);

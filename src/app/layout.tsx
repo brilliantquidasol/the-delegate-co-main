@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
-import type { Metadata } from 'next';
-import './globals.css';
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
+import "./globals.css";
+import { SmoothScrollProvider } from "../components/SmoothScrollProvider";
 
 export const metadata: Metadata = {
   title: 'The Delegate Co.',
@@ -15,7 +16,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SmoothScrollProvider />
+        {children}
+      </body>
     </html>
   );
 }

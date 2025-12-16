@@ -1,5 +1,6 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import {
   User,
   Mail,
@@ -50,6 +51,131 @@ const iconMap = {
 };
 
 export default function GetInTouch({ formTitle = "Contact Form", formFields = defaultFormFields, sectionId }: GetInTouchProps) {
+  const [formData, setFormData] = useState<Record<string, string | File | null>>({});
+  const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const handleInputChange = (name: string, value: string | File | null) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
+    // Clear submit status when user makes changes
+    if (submitStatus) {
+      setSubmitStatus(null);
+      setSubmitMessage("");
+    }
+  };
+
+  const handleFileChange = (name: string, file: File | null) => {
+    setSelectedFiles((prev) => ({ ...prev, [name]: file }));
+    setFormData((prev) => ({ ...prev, [name]: file }));
+    // Clear error for this field when file is selected
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
+    // Clear submit status when user makes changes
+    if (submitStatus) {
+      setSubmitStatus(null);
+      setSubmitMessage("");
+    }
+  };
+
+  const handleFileRemove = (name: string) => {
+    setSelectedFiles((prev) => ({ ...prev, [name]: null }));
+    setFormData((prev) => ({ ...prev, [name]: null }));
+    // Reset the file input
+    const fileInput = document.getElementById(`file-input-${name}`) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    // Clear error
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    formFields.forEach((field) => {
+      const value = formData[field.name];
+      
+      if (field.required !== false && !value) {
+        newErrors[field.name] = `${field.placeholder} is required.`;
+      } else if (field.type === "email" && value && typeof value === "string") {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          newErrors[field.name] = "Please enter a valid email address.";
+        }
+      } else if (field.type === "tel" && value && typeof value === "string") {
+        const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+        if (!phoneRegex.test(value)) {
+          newErrors[field.name] = "Please enter a valid phone number.";
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitStatus(null);
+    setSubmitMessage("");
+
+    if (!validateForm()) {
+      setSubmitStatus("error");
+      setSubmitMessage("Please fix the errors above before submitting.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      // Success
+      setSubmitStatus("success");
+      setSubmitMessage("Thank you! Your message has been sent successfully. We'll get back to you soon.");
+      
+      // Reset form
+      setFormData({});
+      setSelectedFiles({});
+      const form = e.currentTarget;
+      form.reset();
+      
+      // Clear file inputs
+      const fileInputs = form.querySelectorAll('input[type="file"]');
+      fileInputs.forEach((input) => {
+        (input as HTMLInputElement).value = "";
+      });
+    } catch (error) {
+      setSubmitStatus("error");
+      setSubmitMessage("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="bg-[#f5f9ff] py-8 sm:py-12 md:py-16" id={sectionId}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -61,9 +187,9 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
           </div>
           
           {/* Content - Two Columns Layout */}
-          <div className="relative grid md:grid-cols-2">
+          <div className="relative grid lg:grid-cols-2">
             {/* Left Panel - Information Section */}
-            <div className="flex flex-col px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 text-white bg-gradient-to-b from-[#1E2A44] to-[#1a3a6b] md:bg-transparent">
+            <div className="flex flex-col px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 text-white bg-gradient-to-b from-[#1E2A44] to-[#1a3a6b] lg:bg-transparent">
               {/* Top Section - Dark Blue */}
               <div className="space-y-4 sm:space-y-5 md:space-y-6 mb-8 sm:mb-10 md:mb-12">
                 <Reveal as="p" className="inline-flex w-fit items-center justify-center gap-[10px] rounded-[8px] border border-white bg-[#1E2A44] px-2.5 sm:px-3 py-1 sm:py-1.5 text-center text-[11px] sm:text-[12px] md:text-[14px] font-medium leading-[150%] text-white" style={{ fontFamily: 'Moderat, sans-serif' }}>
@@ -171,27 +297,49 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                       const NextIconComponent = iconMap[nextField.icon];
                       return (
                         <Reveal key={`${field.name}-${nextField.name}`} className="grid gap-4 sm:gap-5 md:grid-cols-2">
-                          <div className="relative">
-                            <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
-                            <input
-                              type={field.type}
-                              name={field.name}
-                              placeholder={field.placeholder}
-                              required={field.required}
-                              className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]"
-                              style={{ fontFamily: "'Figtree', sans-serif" }}
-                            />
+                          <div>
+                            <div className="relative">
+                              <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
+                              <input
+                                type={field.type}
+                                name={field.name}
+                                placeholder={field.placeholder}
+                                required={field.required}
+                                value={typeof formData[field.name] === "string" ? formData[field.name] as string : ""}
+                                onChange={(e) => handleInputChange(field.name, e.target.value)}
+                                className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]`}
+                                style={{ fontFamily: "'Figtree', sans-serif" }}
+                                aria-invalid={!!errors[field.name]}
+                                aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                              />
+                            </div>
+                            {errors[field.name] && (
+                              <p className="text-[12px] sm:text-[13px] text-red-500 mt-1" role="alert" id={`${field.name}-error`}>
+                                {errors[field.name]}
+                              </p>
+                            )}
                           </div>
-                          <div className="relative">
-                            <NextIconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
-                            <input
-                              type={nextField.type}
-                              name={nextField.name}
-                              placeholder={nextField.placeholder}
-                              required={nextField.required}
-                              className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]"
-                              style={{ fontFamily: "'Figtree', sans-serif" }}
-                            />
+                          <div>
+                            <div className="relative">
+                              <NextIconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
+                              <input
+                                type={nextField.type}
+                                name={nextField.name}
+                                placeholder={nextField.placeholder}
+                                required={nextField.required}
+                                value={typeof formData[nextField.name] === "string" ? formData[nextField.name] as string : ""}
+                                onChange={(e) => handleInputChange(nextField.name, e.target.value)}
+                                className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[nextField.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]`}
+                                style={{ fontFamily: "'Figtree', sans-serif" }}
+                                aria-invalid={!!errors[nextField.name]}
+                                aria-describedby={errors[nextField.name] ? `${nextField.name}-error` : undefined}
+                              />
+                            </div>
+                            {errors[nextField.name] && (
+                              <p className="text-[12px] sm:text-[13px] text-red-500 mt-1" role="alert" id={`${nextField.name}-error`}>
+                                {errors[nextField.name]}
+                              </p>
+                            )}
                           </div>
                         </Reveal>
                       );
@@ -199,50 +347,164 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
 
                     if (isTextarea) {
                       return (
-                        <Reveal key={field.name} className="relative">
-                          <IconComponent className="absolute left-3 sm:left-4 top-3 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
-                          <textarea
-                            name={field.name}
-                            rows={6}
-                            placeholder={field.placeholder}
-                            required={field.required}
-                            className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a] resize-none"
-                            style={{ fontFamily: "'Figtree', sans-serif" }}
-                          />
+                        <Reveal key={field.name}>
+                          <div className="relative">
+                            <IconComponent className="absolute left-3 sm:left-4 top-3 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
+                            <textarea
+                              name={field.name}
+                              rows={6}
+                              placeholder={field.placeholder}
+                              required={field.required}
+                              value={typeof formData[field.name] === "string" ? formData[field.name] as string : ""}
+                              onChange={(e) => handleInputChange(field.name, e.target.value)}
+                              className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a] resize-none`}
+                              style={{ fontFamily: "'Figtree', sans-serif" }}
+                              aria-invalid={!!errors[field.name]}
+                              aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                            />
+                          </div>
+                          {errors[field.name] && (
+                            <p className="text-[12px] sm:text-[13px] text-red-500 mt-1" role="alert" id={`${field.name}-error`}>
+                              {errors[field.name]}
+                            </p>
+                          )}
                         </Reveal>
                       );
                     }
 
                     if (isFile) {
+                      const selectedFile = selectedFiles[field.name];
+                      const fileInputId = `file-input-${field.name}`;
+                      
                       return (
-                        <Reveal key={field.name} className="relative">
-                          <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
-                          <input
-                            type="file"
-                            name={field.name}
-                            className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a] file:border-0 file:bg-transparent file:text-[#1E1E1E]"
-                            style={{ fontFamily: "'Figtree', sans-serif" }}
-                          />
+                        <Reveal key={field.name}>
+                          <div className="space-y-2">
+                            {selectedFile ? (
+                              <div className={`flex items-center gap-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#c4a35a]"} bg-[#f8f9fa] px-3 sm:px-4 py-2.5 sm:py-3`}>
+                                <IconComponent className="h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a] shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[12px] sm:text-[13px] text-[#6b7280] font-medium" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                                    File selected:
+                                  </p>
+                                  <p className="text-[14px] sm:text-[15px] text-[#1E1E1E] font-medium truncate" style={{ fontFamily: "'Figtree', sans-serif" }} title={selectedFile.name}>
+                                    {selectedFile.name}
+                                  </p>
+                                  <p className="text-[11px] sm:text-[12px] text-[#6b7280]" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                                    {(selectedFile.size / 1024).toFixed(1)} KB
+                                  </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const input = document.getElementById(fileInputId) as HTMLInputElement;
+                                      input?.click();
+                                    }}
+                                    className="text-[12px] sm:text-[13px] text-[#c4a35a] font-medium hover:text-[#b8934f] transition underline"
+                                    style={{ fontFamily: "'Figtree', sans-serif" }}
+                                  >
+                                    Replace
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleFileRemove(field.name)}
+                                    className="text-[12px] sm:text-[13px] text-red-500 font-medium hover:text-red-700 transition"
+                                    aria-label="Remove file"
+                                    style={{ fontFamily: "'Figtree', sans-serif" }}
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="relative">
+                                <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a] z-10" />
+                                <label
+                                  htmlFor={fileInputId}
+                                  className={`flex items-center cursor-pointer w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus-within:border-[#c4a35a] hover:border-[#c4a35a]`}
+                                  style={{ fontFamily: "'Figtree', sans-serif" }}
+                                >
+                                  <span className="text-[#6b7280]">Choose file</span>
+                                  <span className="ml-2 text-[#9ca3af] text-[12px] sm:text-[13px]">(No file chosen)</span>
+                                </label>
+                              </div>
+                            )}
+                            <input
+                              type="file"
+                              id={fileInputId}
+                              name={field.name}
+                              required={field.required}
+                              onChange={(e) => {
+                                const file = e.target.files?.[0] || null;
+                                handleFileChange(field.name, file);
+                              }}
+                              className="hidden"
+                              aria-label={field.placeholder}
+                            />
+                            {errors[field.name] && (
+                              <p className="text-[12px] sm:text-[13px] text-red-500 mt-1" role="alert" id={`${field.name}-error`}>
+                                {errors[field.name]}
+                              </p>
+                            )}
+                          </div>
                         </Reveal>
                       );
                     }
 
                     return (
-                      <Reveal key={field.name} className="relative">
-                        <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
-                        <input
-                          type={field.type}
-                          name={field.name}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-[#d0d6ea] text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]"
-                          style={{ fontFamily: "'Figtree', sans-serif" }}
-                        />
+                      <Reveal key={field.name}>
+                        <div className="relative">
+                          <IconComponent className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-[#5d688a]" />
+                          <input
+                            type={field.type}
+                            name={field.name}
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            value={typeof formData[field.name] === "string" ? formData[field.name] as string : ""}
+                            onChange={(e) => handleInputChange(field.name, e.target.value)}
+                            className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]`}
+                            style={{ fontFamily: "'Figtree', sans-serif" }}
+                            aria-invalid={!!errors[field.name]}
+                            aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                          />
+                        </div>
+                        {errors[field.name] && (
+                          <p className="text-[12px] sm:text-[13px] text-red-500 mt-1" role="alert" id={`${field.name}-error`}>
+                            {errors[field.name]}
+                          </p>
+                        )}
                       </Reveal>
                     );
                   })}
-                  <button className="w-full rounded-[8px] bg-[#c4a35a] px-5 sm:px-6 py-2.5 sm:py-3 text-center text-[15px] sm:text-[16px] md:text-[17px] font-medium leading-[135%] text-white transition hover:bg-[#b8934f]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                    Send Message
+                  
+                  {/* Submit Status Messages */}
+                  {submitStatus === "success" && (
+                    <div className="rounded-xl sm:rounded-2xl bg-green-50 border border-green-200 px-4 py-3" role="alert">
+                      <p className="text-[14px] sm:text-[15px] text-green-800 font-medium" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                        ✓ {submitMessage}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {submitStatus === "error" && (
+                    <div className="rounded-xl sm:rounded-2xl bg-red-50 border border-red-200 px-4 py-3" role="alert">
+                      <p className="text-[14px] sm:text-[15px] text-red-800 font-medium" style={{ fontFamily: "'Figtree', sans-serif" }}>
+                        {submitMessage}
+                      </p>
+                    </div>
+                  )}
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`w-full rounded-[8px] px-5 sm:px-6 py-2.5 sm:py-3 text-center text-[15px] sm:text-[16px] md:text-[17px] font-medium leading-[135%] text-white transition ${
+                      isSubmitting
+                        ? "bg-[#9a8a5f] cursor-not-allowed"
+                        : "bg-[#c4a35a] hover:bg-[#b8934f]"
+                    }`}
+                    style={{ fontFamily: "'Figtree', sans-serif" }}
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </button>
                 </form>
               </div>

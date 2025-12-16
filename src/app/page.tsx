@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   ArrowRight,
   ChevronRight,
@@ -12,6 +12,7 @@ import Footer from "../components/Footer";
 import GetInTouch from "../components/GetInTouch";
 import ApplyModal from "../components/ApplyModal";
 import { Reveal } from "../components/Reveal";
+import { useAccordionAnimation } from "../hooks/useAccordionAnimation";
 
 const differentiators = [
   {
@@ -160,6 +161,57 @@ const galleryImages = [
   "/home/gallery/gallery-5.jpg",
 ];
 
+type FaqItemProps = {
+  faq: {
+    question: string;
+    answer: string;
+  };
+  isOpen: boolean;
+  onToggle: () => void;
+};
+
+const FaqItem = ({ faq, isOpen, onToggle }: FaqItemProps) => {
+  const contentId = useId();
+  const { contentRef, panelStyles, contentStyles, iconStyles } =
+    useAccordionAnimation(isOpen);
+
+  return (
+    <>
+      <button
+        className="flex w-full items-center justify-between text-left text-[13px] sm:text-[14px] font-medium text-[#1E1E1E] md:text-[17px]"
+        style={{ fontFamily: "'Figtree', sans-serif" }}
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+      >
+        {faq.question}
+        <ChevronDown
+          className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-[#1E1E1E]"
+          style={iconStyles}
+        />
+      </button>
+      <div
+        id={contentId}
+        className="grid overflow-hidden"
+        style={panelStyles}
+        aria-hidden={!isOpen}
+      >
+        <div ref={contentRef}>
+          <p
+            className="mt-2 sm:mt-3 text-[12px] sm:text-[13px] leading-[150%] text-[#4b5678] md:text-[16px]"
+            style={{
+              fontFamily: "'Figtree', sans-serif",
+              ...contentStyles,
+            }}
+          >
+            {faq.answer}
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
+
 export default function Page() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [isApplyOpen, setIsApplyOpen] = useState(false);
@@ -181,8 +233,8 @@ export default function Page() {
           <div className="absolute inset-0 bg-[#030c32]/60" />
         </div>
 
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-6 sm:gap-8 px-4 pt-16 sm:pt-20 sm:pb-12 md:gap-12 md:px-6 md:pt-24 md:pb-0 md:grid-cols-[1.1fr,0.9fr] md:items-center">
-          <Reveal className="space-y-3 sm:space-y-4 md:space-y-6 md:pb-0 pb-6 sm:pb-8">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-6 sm:gap-8 px-4 pt-16 sm:pt-20 sm:pb-12 md:gap-12 md:px-6 md:pt-24 md:pb-0 md:grid-cols-[1.1fr,0.9fr] md:items-end">
+          <Reveal className="space-y-3 sm:space-y-4 md:space-y-6 md:pb-24 pb-6 sm:pb-8">
             <h1 className="text-[36px] sm:text-[36px] leading-tight font-bold text-white md:text-[64px] md:leading-none lg:text-[85px]">
               <span className="block sm:inline">
                 Your behind-
@@ -379,7 +431,7 @@ export default function Page() {
             </Reveal>
           </div>
 
-          <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {remoteTeam.map((role, index) => (
               <Reveal
                 key={role.title}
@@ -396,9 +448,6 @@ export default function Page() {
                 <p className="self-stretch text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
                   {role.copy}
                 </p>
-                <button className="mt-auto self-start text-left text-[13px] sm:text-[14px] font-normal leading-[135%] text-[#1E1E1E] underline md:text-[17px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  Learn More
-                </button>
               </Reveal>
             ))}
           </div>
@@ -431,21 +480,11 @@ export default function Page() {
                     className="rounded-lg sm:rounded-xl md:rounded-2xl border border-[#e4e9f3] bg-white p-3 sm:p-4 md:p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
                     delay={index * 60}
                   >
-                    <button
-                      className="flex w-full items-center justify-between text-left text-[13px] sm:text-[14px] font-medium text-[#1E1E1E] md:text-[17px]"
-                      style={{ fontFamily: "'Figtree', sans-serif" }}
-                      onClick={() => setOpenFaq(isOpen ? null : index)}
-                    >
-                      {faq.question}
-                      <ChevronDown
-                        className={`h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-[#1E1E1E] transition ${isOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                    {isOpen && (
-                      <p className="mt-2 sm:mt-3 text-[12px] sm:text-[13px] leading-[150%] text-[#4b5678] md:text-[16px]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                        {faq.answer}
-                      </p>
-                    )}
+                    <FaqItem
+                      faq={faq}
+                      isOpen={isOpen}
+                      onToggle={() => setOpenFaq(isOpen ? null : index)}
+                    />
                   </Reveal>
                 );
               })}

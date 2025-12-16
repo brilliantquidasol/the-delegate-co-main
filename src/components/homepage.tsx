@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   ArrowRight,
   ChevronRight,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Header from "./Header";
 import Footer from "./Footer";
+import { useAccordionAnimation } from "../hooks/useAccordionAnimation";
 
 const differentiators = [
   {
@@ -128,6 +129,59 @@ const remoteTeam = [
       "Turn conversations into conversions. Our telemarketers specialize in lead generation, client outreach, and follow-ups designed to drive business growth. With professionalism and persuasive communication, they help you connect with prospects, nurture relationships, and boost sales opportunities.",
   },
 ];
+
+type Faq = {
+  question: string;
+  answer: string;
+};
+
+type FaqItemProps = {
+  faq: Faq;
+  isOpen: boolean;
+  onToggle: () => void;
+};
+
+const FaqItem = ({ faq, isOpen, onToggle }: FaqItemProps) => {
+  const contentId = useId();
+  const { contentRef, panelStyles, contentStyles, iconStyles } =
+    useAccordionAnimation(isOpen);
+
+  return (
+    <div className="rounded-2xl border border-[#e4e9f3] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <button
+        className="flex w-full items-center justify-between text-left text-[17px] font-medium text-[#1E1E1E]"
+        style={{ fontFamily: "'Figtree', sans-serif" }}
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+      >
+        {faq.question}
+        <ChevronDown
+          className="h-5 w-5 shrink-0 text-[#1E1E1E]"
+          style={iconStyles}
+        />
+      </button>
+      <div
+        id={contentId}
+        className="grid overflow-hidden"
+        style={panelStyles}
+        aria-hidden={!isOpen}
+      >
+        <div ref={contentRef}>
+          <p
+            className="mt-3 text-[16px] leading-[150%] text-[#4b5678]"
+            style={{
+              fontFamily: "'Figtree', sans-serif",
+              ...contentStyles,
+            }}
+          >
+            {faq.answer}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const faqs = [
   {
@@ -372,9 +426,6 @@ export default function LandingPage() {
                 <p className="self-stretch text-[17px] font-normal leading-[135%] text-[#1E1E1E]" style={{ fontFamily: "'Figtree', sans-serif" }}>
                   {role.copy}
                 </p>
-                <button className="mt-auto self-start text-left text-[17px] font-normal leading-[135%] text-[#1E1E1E] underline" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                  Learn More
-                </button>
               </article>
             ))}
           </div>
@@ -397,26 +448,12 @@ export default function LandingPage() {
               {faqs.map((faq, index) => {
                 const isOpen = openFaq === index;
                 return (
-                  <div
+                  <FaqItem
                     key={faq.question}
-                    className="rounded-2xl border border-[#e4e9f3] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
-                  >
-                    <button
-                      className="flex w-full items-center justify-between text-left text-[17px] font-medium text-[#1E1E1E]"
-                      style={{ fontFamily: "'Figtree', sans-serif" }}
-                      onClick={() => setOpenFaq(isOpen ? null : index)}
-                    >
-                      {faq.question}
-                      <ChevronDown
-                        className={`h-5 w-5 shrink-0 text-[#1E1E1E] transition ${isOpen ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                    {isOpen && (
-                      <p className="mt-3 text-[16px] leading-[150%] text-[#4b5678]" style={{ fontFamily: "'Figtree', sans-serif" }}>
-                        {faq.answer}
-                      </p>
-                    )}
-                  </div>
+                    faq={faq}
+                    isOpen={isOpen}
+                    onToggle={() => setOpenFaq(isOpen ? null : index)}
+                  />
                 );
               })}
             </div>
