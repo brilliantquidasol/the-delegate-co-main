@@ -10,31 +10,13 @@ type ApplyModalProps = {
   jobTitle?: string;
 };
 
-const genderOptions: Option[] = [
-  { label: "Male", value: "male" },
-  { label: "Female", value: "female" },
-  { label: "Non-binary", value: "non-binary" },
-  { label: "Prefer not to say", value: "na" },
-];
-
-const experienceOptions: Option[] = [
-  { label: "Experienced Agent", value: "experienced" },
-  { label: "Mid-level", value: "mid" },
-  { label: "Entry-level", value: "entry" },
-];
-
 export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProps) {
   const [formValues, setFormValues] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
-    day: "",
-    month: "",
-    year: "",
-    gender: genderOptions[0]?.value ?? "",
-    citizenship: "",
-    experience: experienceOptions[0]?.value ?? "",
+    birthday: "",
     street: "",
   });
   const [files, setFiles] = useState<File[]>([]);
@@ -70,6 +52,12 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
     setFormValues((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
+  const handlePhoneFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!formValues.phone || formValues.phone.trim() === "") {
+      setFormValues((prev) => ({ ...prev, phone: "+65" }));
+    }
+  };
+
   const imagePreviews = useMemo(
     () =>
       files.map((file) => ({
@@ -86,12 +74,7 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
       "lastName",
       "phone",
       "email",
-      "day",
-      "month",
-      "year",
-      "gender",
-      "citizenship",
-      "experience",
+      "birthday",
       "street",
     ];
 
@@ -105,9 +88,7 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
       nextErrors.email = "Enter a valid email address.";
     }
 
-    if (files.length === 0) {
-      nextErrors.files = "Please upload at least one image (up to 3).";
-    } else if (files.length > 3) {
+    if (files.length > 3) {
       nextErrors.files = "You can upload up to 3 images.";
     }
 
@@ -172,12 +153,7 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
       lastName: "",
       phone: "",
       email: "",
-      day: "",
-      month: "",
-      year: "",
-      gender: genderOptions[0]?.value ?? "",
-      citizenship: "",
-      experience: experienceOptions[0]?.value ?? "",
+      birthday: "",
       street: "",
     });
     setFiles([]);
@@ -228,6 +204,11 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
             </div>
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+              {/* Basic Information Label */}
+              <label className="block text-[14px] font-medium text-[#1E1E1E] mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+                Basic Information
+              </label>
+              
               {/* Names */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
@@ -270,6 +251,7 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
                     className={`input ${errors.phone ? "input-error" : ""}`}
                     value={formValues.phone}
                     onChange={handleInput("phone")}
+                    onFocus={handlePhoneFocus}
                     aria-invalid={!!errors.phone}
                     aria-describedby={errors.phone ? "phone-error" : undefined}
                   />
@@ -296,120 +278,33 @@ export default function ApplyModal({ isOpen, onClose, jobTitle }: ApplyModalProp
                 </div>
               </div>
 
-              {/* DOB / Gender */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="grid grid-cols-3 gap-2">
-                  <div>
-                    <input
-                      placeholder="DD"
-                      className={`input ${errors.day ? "input-error" : ""}`}
-                      value={formValues.day}
-                      onChange={handleInput("day")}
-                      aria-invalid={!!errors.day}
-                      aria-describedby={errors.day ? "day-error" : undefined}
-                    />
-                    {errors.day && (
-                      <p id="day-error" className="error-text">
-                        {errors.day}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      placeholder="MM"
-                      className={`input ${errors.month ? "input-error" : ""}`}
-                      value={formValues.month}
-                      onChange={handleInput("month")}
-                      aria-invalid={!!errors.month}
-                      aria-describedby={errors.month ? "month-error" : undefined}
-                    />
-                    {errors.month && (
-                      <p id="month-error" className="error-text">
-                        {errors.month}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      placeholder="YY"
-                      className={`input ${errors.year ? "input-error" : ""}`}
-                      value={formValues.year}
-                      onChange={handleInput("year")}
-                      aria-invalid={!!errors.year}
-                      aria-describedby={errors.year ? "year-error" : undefined}
-                    />
-                    {errors.year && (
-                      <p id="year-error" className="error-text">
-                        {errors.year}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <select
-                    className={`input ${errors.gender ? "input-error" : ""}`}
-                    value={formValues.gender}
-                    onChange={handleInput("gender")}
-                    aria-invalid={!!errors.gender}
-                    aria-describedby={errors.gender ? "gender-error" : undefined}
-                  >
-                    {genderOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.gender && (
-                    <p id="gender-error" className="error-text">
-                      {errors.gender}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Citizenship / Experience */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <input
-                    placeholder="Citizenship"
-                    className={`input ${errors.citizenship ? "input-error" : ""}`}
-                    value={formValues.citizenship}
-                    onChange={handleInput("citizenship")}
-                    aria-invalid={!!errors.citizenship}
-                    aria-describedby={errors.citizenship ? "citizenship-error" : undefined}
-                  />
-                  {errors.citizenship && (
-                    <p id="citizenship-error" className="error-text">
-                      {errors.citizenship}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <select
-                    className={`input ${errors.experience ? "input-error" : ""}`}
-                    value={formValues.experience}
-                    onChange={handleInput("experience")}
-                    aria-invalid={!!errors.experience}
-                    aria-describedby={errors.experience ? "experience-error" : undefined}
-                  >
-                    {experienceOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.experience && (
-                    <p id="experience-error" className="error-text">
-                      {errors.experience}
-                    </p>
-                  )}
-                </div>
+              {/* Birthday */}
+              <div>
+                <label className="block text-[14px] font-medium text-[#1E1E1E] mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  Birthday
+                </label>
+                <input
+                  type="date"
+                  className={`input ${errors.birthday ? "input-error" : ""}`}
+                  value={formValues.birthday}
+                  onChange={handleInput("birthday")}
+                  aria-invalid={!!errors.birthday}
+                  aria-describedby={errors.birthday ? "birthday-error" : undefined}
+                />
+                {errors.birthday && (
+                  <p id="birthday-error" className="error-text">
+                    {errors.birthday}
+                  </p>
+                )}
               </div>
 
               {/* Address */}
               <div>
+                <label className="block text-[14px] font-medium text-[#1E1E1E] mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  Complete Address
+                </label>
                 <input
-                  placeholder="Street"
+                  placeholder="Complete Address"
                   className={`input ${errors.street ? "input-error" : ""}`}
                   value={formValues.street}
                   onChange={handleInput("street")}

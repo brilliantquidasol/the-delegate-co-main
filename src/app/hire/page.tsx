@@ -253,16 +253,10 @@ export default function HirePage() {
       <section id="engagement-process" className="flex flex-col items-start gap-6 sm:gap-8 md:gap-[30px] self-stretch bg-[#F8F9FA] py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-12 lg:px-20 xl:px-[160px]">
         <div className="w-full">
           <Reveal className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2
-              className="text-center text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight md:leading-[1.2] lg:leading-[72px] tracking-[0.352px] text-[#1E2A44] mb-3 sm:mb-4"
-              style={{ fontFamily: "'Inter', sans-serif" }}
-            >
+            <h2 className="text-[24px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold leading-tight md:leading-none text-[#1E1E1E] mb-3 sm:mb-4" style={{ fontFamily: "'Figtree', sans-serif" }}>
               Our Engagement Process
             </h2>
-            <p
-              className="w-full max-w-[765px] flex-shrink-0 text-center text-[18px] sm:text-[24px] md:text-[32px] lg:text-[40px] xl:text-[48px] font-bold leading-tight md:leading-[1.2] lg:leading-[72px] tracking-[0.352px] text-[#1E2A44] mx-auto px-4"
-              style={{ fontFamily: "'Inter', sans-serif" }}
-            >
+            <p className="text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] max-w-2xl mx-auto px-4" style={{ fontFamily: "'Figtree', sans-serif" }}>
               Follow our streamlined process to get matched with the perfect virtual assistant for your business needs.
             </p>
           </Reveal>
@@ -291,13 +285,13 @@ export default function HirePage() {
       <GetInTouch
         formTitle="Hire Our Team Form"
         formFields={[
-          { type: "text", name: "firstName", placeholder: "First Name", icon: "user", gridCols: 2 },
-          { type: "text", name: "lastName", placeholder: "Last Name", icon: "user", gridCols: 2 },
-          { type: "email", name: "email", placeholder: "Email Address", icon: "mail" },
-          { type: "text", name: "companyName", placeholder: "Company Name", icon: "briefcase" },
-          { type: "text", name: "teamSize", placeholder: "Team Size Needed", icon: "hash" },
-          { type: "textarea", name: "message", placeholder: "How can we help you? Feel free to get in touch!", icon: "pencil" },
-          { type: "file", name: "attachment", placeholder: "Attach File", icon: "paperclip" },
+          { type: "text", name: "firstName", placeholder: "First Name", icon: "user", gridCols: 2, required: true },
+          { type: "text", name: "lastName", placeholder: "Last Name", icon: "user", gridCols: 2, required: true },
+          { type: "email", name: "email", placeholder: "Email Address", icon: "mail", required: true },
+          { type: "text", name: "companyName", placeholder: "Company Name", icon: "briefcase", required: true },
+          { type: "text", name: "teamSize", placeholder: "Team Size Needed", icon: "hash", required: false },
+          { type: "textarea", name: "message", placeholder: "How can we help you? Feel free to get in touch!", icon: "pencil", required: true },
+          { type: "file", name: "attachment", placeholder: "Attach File", icon: "paperclip", required: false },
         ]}
         sectionId="hire-contact"
       />

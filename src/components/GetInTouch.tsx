@@ -30,13 +30,13 @@ type GetInTouchProps = {
 };
 
 const defaultFormFields: FormField[] = [
-  { type: "text", name: "firstName", placeholder: "First Name", icon: "user", gridCols: 2 },
-  { type: "text", name: "lastName", placeholder: "Last Name", icon: "user", gridCols: 2 },
-  { type: "email", name: "email", placeholder: "Email Address", icon: "mail" },
-  { type: "tel", name: "phone", placeholder: "Phone Number", icon: "phone" },
-  { type: "text", name: "subject", placeholder: "Subject", icon: "info" },
-  { type: "textarea", name: "message", placeholder: "How can we help you? Feel free to get in touch!", icon: "pencil" },
-  { type: "file", name: "attachment", placeholder: "Attach File", icon: "paperclip" },
+  { type: "text", name: "firstName", placeholder: "First Name", icon: "user", gridCols: 2, required: true },
+  { type: "text", name: "lastName", placeholder: "Last Name", icon: "user", gridCols: 2, required: true },
+  { type: "email", name: "email", placeholder: "Email Address", icon: "mail", required: true },
+  { type: "tel", name: "phone", placeholder: "Phone Number", icon: "phone", required: false },
+  { type: "text", name: "subject", placeholder: "Subject", icon: "info", required: true },
+  { type: "textarea", name: "message", placeholder: "How can we help you? Feel free to get in touch!", icon: "pencil", required: true },
+  { type: "file", name: "attachment", placeholder: "Attach File", icon: "paperclip", required: false },
 ];
 
 const iconMap = {
@@ -117,7 +117,10 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
     formFields.forEach((field) => {
       const value = formData[field.name];
       
-      if (field.required !== false && !value) {
+      // Check if field is required (default to true if not specified)
+      const isRequired = field.required !== false;
+      
+      if (isRequired && !value) {
         newErrors[field.name] = `${field.placeholder} is required.`;
       } else if (field.type === "email" && value && typeof value === "string") {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -304,13 +307,14 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                                 type={field.type}
                                 name={field.name}
                                 placeholder={field.placeholder}
-                                required={field.required}
+                                required={field.required !== false}
                                 value={typeof formData[field.name] === "string" ? formData[field.name] as string : ""}
                                 onChange={(e) => handleInputChange(field.name, e.target.value)}
                                 className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]`}
                                 style={{ fontFamily: "'Figtree', sans-serif" }}
                                 aria-invalid={!!errors[field.name]}
                                 aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                                aria-required={field.required !== false}
                               />
                             </div>
                             {errors[field.name] && (
@@ -326,13 +330,14 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                                 type={nextField.type}
                                 name={nextField.name}
                                 placeholder={nextField.placeholder}
-                                required={nextField.required}
+                                required={nextField.required !== false}
                                 value={typeof formData[nextField.name] === "string" ? formData[nextField.name] as string : ""}
                                 onChange={(e) => handleInputChange(nextField.name, e.target.value)}
                                 className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[nextField.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]`}
                                 style={{ fontFamily: "'Figtree', sans-serif" }}
                                 aria-invalid={!!errors[nextField.name]}
                                 aria-describedby={errors[nextField.name] ? `${nextField.name}-error` : undefined}
+                                aria-required={nextField.required !== false}
                               />
                             </div>
                             {errors[nextField.name] && (
@@ -354,13 +359,14 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                               name={field.name}
                               rows={6}
                               placeholder={field.placeholder}
-                              required={field.required}
+                              required={field.required !== false}
                               value={typeof formData[field.name] === "string" ? formData[field.name] as string : ""}
                               onChange={(e) => handleInputChange(field.name, e.target.value)}
                               className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a] resize-none`}
                               style={{ fontFamily: "'Figtree', sans-serif" }}
                               aria-invalid={!!errors[field.name]}
                               aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                              aria-required={field.required !== false}
                             />
                           </div>
                           {errors[field.name] && (
@@ -433,13 +439,14 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                               type="file"
                               id={fileInputId}
                               name={field.name}
-                              required={field.required}
+                              required={field.required !== false}
                               onChange={(e) => {
                                 const file = e.target.files?.[0] || null;
                                 handleFileChange(field.name, file);
                               }}
                               className="hidden"
                               aria-label={field.placeholder}
+                              aria-required={field.required !== false}
                             />
                             {errors[field.name] && (
                               <p className="text-[12px] sm:text-[13px] text-red-500 mt-1" role="alert" id={`${field.name}-error`}>
@@ -459,13 +466,14 @@ export default function GetInTouch({ formTitle = "Contact Form", formFields = de
                             type={field.type}
                             name={field.name}
                             placeholder={field.placeholder}
-                            required={field.required}
+                            required={field.required !== false}
                             value={typeof formData[field.name] === "string" ? formData[field.name] as string : ""}
                             onChange={(e) => handleInputChange(field.name, e.target.value)}
                             className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border ${errors[field.name] ? "border-red-400" : "border-[#d0d6ea]"} bg-white text-[14px] sm:text-[15px] md:text-[17px] font-normal leading-[135%] text-[#1E1E1E] outline-none transition focus:border-[#c4a35a]`}
                             style={{ fontFamily: "'Figtree', sans-serif" }}
                             aria-invalid={!!errors[field.name]}
                             aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                            aria-required={field.required !== false}
                           />
                         </div>
                         {errors[field.name] && (
