@@ -12,10 +12,10 @@ function FooterColumn({ title, items }: { title: string; items: FooterItem[] }) 
       <ul className="mt-3 space-y-2 text-sm text-white/80">
         {items.map((item) => (
           <li key={item.label}>
-            {item.isExternal || item.href.startsWith("#") ? (
+            {item.isExternal || item.href.startsWith("#") || item.href.includes("#") ? (
               <a href={item.href}>{item.label}</a>
             ) : (
-              <Link href={item.href}>{item.label}</Link>
+              <Link href={item.href as string}>{item.label}</Link>
             )}
           </li>
         ))}
