@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import "../index.css";
+
+:root {
+  --header-offset: 88px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Keep anchored sections visible beneath fixed header */
+section[id],
+main [id][data-anchor],
+main [id] {
+  scroll-margin-top: var(--header-offset);
+}
+
+@keyframes scroll-gallery {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-gallery {
+  animation: scroll-gallery 30s linear infinite;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 600ms ease, transform 600ms ease;
+  will-change: opacity, transform;
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal--visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}
+
