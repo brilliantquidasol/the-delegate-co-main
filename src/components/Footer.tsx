@@ -1,5 +1,9 @@
 import Link from "next/link";
+import type { Route } from "next";
+import type { UrlObject } from "url";
 import { Linkedin, Facebook, Instagram } from "lucide-react";
+
+type LinkHref = Route | UrlObject;
 
 type FooterItem = { label: string; href: string; isExternal?: boolean };
 
@@ -10,15 +14,26 @@ function FooterColumn({ title, items }: { title: string; items: FooterItem[] }) 
         {title}
       </h4>
       <ul className="mt-3 space-y-2 text-sm text-white/80">
-        {items.map((item) => (
-          <li key={item.label}>
-            {item.isExternal || item.href.startsWith("#") || item.href.includes("#") ? (
-              <a href={item.href}>{item.label}</a>
-            ) : (
-              <Link href={item.href as string}>{item.label}</Link>
-            )}
-          </li>
-        ))}
+        {items.map((item) => {
+          const shouldUseAnchor = item.isExternal || item.href.startsWith("#") || item.href.includes("#");
+          
+          if (shouldUseAnchor) {
+            return (
+              <li key={item.label}>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            );
+          }
+          
+          // Cast to LinkHref type for Next.js Link component
+          const linkHref = item.href as LinkHref;
+          
+          return (
+            <li key={item.label}>
+              <Link href={linkHref}>{item.label}</Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
