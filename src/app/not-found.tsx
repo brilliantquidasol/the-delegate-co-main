@@ -8,23 +8,23 @@ import { Reveal } from "../components/Reveal";
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
+    <main className="min-h-0 sm:min-h-screen text-white" style={{ fontFamily: "'Figtree', sans-serif" }}>
       <Header />
       
       {/* Gradient Background */}
-      <div className="relative min-h-screen overflow-hidden">
+      <div className="relative min-h-0 sm:min-h-screen overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#030c32] via-[#1E2A44] to-[#142148]">
           {/* Additional gradient overlay for depth */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         </div>
         
         {/* Content */}
-        <div className="relative z-10 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24 min-h-[calc(100vh-80px)] flex items-center">
-          <div className="mx-auto max-w-6xl px-4 md:px-6 w-full">
-            <div className="flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8 md:space-y-10">
+        <div className="relative z-10 pt-10 sm:pt-28 md:pt-32 pb-5 sm:pb-20 md:pb-24 min-h-0 sm:min-h-[calc(100vh-80px)] flex sm:items-center">
+          <div className="mx-auto max-w-6xl px-4 md:px-6 w-full py-4 sm:py-0">
+            <div className="flex flex-col items-center justify-center text-center space-y-3 sm:space-y-8 md:space-y-10">
               {/* 404 Text */}
               <Reveal>
-                <div className="relative mb-4 sm:mb-6 md:mb-8 w-full flex justify-center">
+                <div className="relative mb-1 sm:mb-6 md:mb-8 w-full flex justify-center">
                   <div 
                     className="text-[180px] sm:text-[240px] md:text-[320px] lg:text-[400px] font-bold leading-none text-white/20 select-none"
                     style={{ 
@@ -52,7 +52,7 @@ export default function NotFound() {
               </Reveal>
               
               <Reveal delay={180}>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-1 sm:pt-2">
                   <Link
                     href="/"
                     className="flex justify-center items-center gap-[10px] rounded-md bg-[#d5a546] px-6 sm:px-8 py-3 sm:py-3.5 text-center text-[14px] sm:text-[16px] font-medium leading-[150%] text-[#1E1E1E] transition hover:bg-[#c29132] md:px-10 md:py-4"
@@ -73,7 +73,7 @@ export default function NotFound() {
               </Reveal>
               
               <Reveal delay={240}>
-                <div className="pt-8 sm:pt-10 md:pt-12">
+                <div className="pt-0 sm:pt-10 md:pt-12">
                   <p className="text-[14px] sm:text-[15px] font-normal leading-[135%] text-white/70 md:text-[17px]">
                     Or explore our{" "}
                     <Link href="/#what-we-do" className="text-[#C4A35A] hover:text-[#d5a546] hover:underline transition">
